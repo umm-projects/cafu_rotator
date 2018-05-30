@@ -24,6 +24,9 @@
     "Assets"
   ],
   "dependencies": {
+    "@umm/cafu_resume_pause": "umm-projects/cafu_resume_pause#^1.0.0",
+    "@umm/event_activator": "umm-projects/event_activator#^1.0.0",
+    "@umm/extra_unirx": "umm-projects/extra_unirx#^1.0.0",
     "@umm/scripts": "umm-projects/scripts#^1.0.0"
   },
   "devDependencies": {}
