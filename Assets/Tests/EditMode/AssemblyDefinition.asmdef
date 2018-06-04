@@ -1,0 +1,17 @@
+{
+    "name": "Tests.EditMode",
+    "references": [
+        "umm@cafu_rotator",
+        "umm@extra_unirx",
+        "umm@cafu_core",
+        "umm@unirx"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

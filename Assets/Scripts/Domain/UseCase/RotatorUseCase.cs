@@ -1,4 +1,5 @@
-﻿using CAFU.Core.Domain.Model;
+﻿using System;
+using CAFU.Core.Domain.Model;
 using CAFU.Core.Domain.UseCase;
 using CAFU.Rotator.Domain.Model;
 using ExtraUniRx;
@@ -8,11 +9,11 @@ namespace CAFU.Rotator.Domain.UseCase
 {
     public interface IRotatorUseCase : IUseCase
     {
-        UniRx.IObservable<float> RotationDiffAsObservable { get; }
+        IObservable<float> RotationDiffAsObservable { get; }
 
-        UniRx.IObservable<float> RotationSpeedAsObservable { get; }
+        IObservable<float> RotationSpeedAsObservable { get; }
 
-        UniRx.IObservable<int> RotationCountAsObservable { get; }
+        IObservable<int> RotationCountAsObservable { get; }
 
         int TotalCount { get; }
 
@@ -48,9 +49,9 @@ namespace CAFU.Rotator.Domain.UseCase
             }
         }
 
-        public UniRx.IObservable<float> RotationDiffAsObservable => this.Model.RotationDiffRad;
+        public IObservable<float> RotationDiffAsObservable => this.Model.RotationDiffRad;
 
-        public UniRx.IObservable<float> RotationSpeedAsObservable => this.Model.RotationSpeed;
+        public IObservable<float> RotationSpeedAsObservable => this.Model.RotationSpeed;
 
         public int TotalCount => this.TotalCountProperty.Value;
 
@@ -58,7 +59,7 @@ namespace CAFU.Rotator.Domain.UseCase
 
         private SubjectProperty<int> TotalCountProperty { get; set; }
 
-        public UniRx.IObservable<int> RotationCountAsObservable => this.TotalCountProperty;
+        public IObservable<int> RotationCountAsObservable => this.TotalCountProperty;
 
         public void OnPressStart(Vector3 position, Vector3 centerPosition)
         {
