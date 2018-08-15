@@ -1,5 +1,5 @@
 {
-    "name": "Tests.EditMode",
+    "name": "umm@cafu_rotator-Tests-EditMode",
     "references": [
         "umm@cafu_rotator",
         "umm@extra_unirx",
