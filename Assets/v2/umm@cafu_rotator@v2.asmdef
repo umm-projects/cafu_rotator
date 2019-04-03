@@ -1,0 +1,15 @@
+{
+    "name": "umm@cafu_rotator@v2",
+    "references": [
+        "umm@cafu_core@v3",
+        "umm@cafu_resume_pause",
+        "umm@event_activator",
+        "umm@extra_unirx",
+        "umm@unirx",
+        "Zenject"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
