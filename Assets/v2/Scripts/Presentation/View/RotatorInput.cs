@@ -4,6 +4,7 @@ using CAFU.Rotator.Presentation.Presenter.Interface;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityModule;
 using Zenject;
 
 namespace CAFU.Rotator.Presentation.View
@@ -22,6 +23,8 @@ namespace CAFU.Rotator.Presentation.View
 
         void IInitializable.Initialize()
         {
+            this.RegisterEventActivationHandler();
+
             CenterPosition = Center.transform.localPosition;
             UpdateAsObservable = this.UpdateAsObservable();
         }
