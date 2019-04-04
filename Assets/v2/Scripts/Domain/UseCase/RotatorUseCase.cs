@@ -18,7 +18,7 @@ namespace CAFU.Rotator.Domain.UseCase
         [Inject] private IRotatorEntity RotatorEntity { get; set; }
         [Inject] private IRotatorPresenter RotatorPresenter { get; set; }
 
-        [InjectOptional] private IRotatorFinishReporter RotatorFinishReporter { get; set; }
+        [InjectOptional] private IRotatorFinishReportEntity RotatorFinishReportEntity { get; set; }
 
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
@@ -110,7 +110,7 @@ namespace CAFU.Rotator.Domain.UseCase
 
         private IDisposable StartObservingReceiveTotalRotationCount()
         {
-            return RotatorFinishReporter?
+            return RotatorFinishReportEntity?
                 .OnFinishedAsObservable()
                 .Subscribe(_ => RotatorPresenter.ReportTotalRotationCount(TotalRotationCount));
         }

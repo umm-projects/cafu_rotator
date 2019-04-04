@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace CAFU.Rotator.Domain.Entity
 {
+    public interface IRotatorFinishReportEntity : IEntity
+    {
+        IObservable<Unit> OnFinishedAsObservable();
+    }
+
     public interface IRotatorEntity : IEntity
     {
         float RotationRad { get; set; }
