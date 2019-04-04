@@ -14,6 +14,7 @@ namespace CAFU.Rotator.Presentation.Presenter
         [Inject] private IRotatorEventDispatcher RotatorInput { get; set; }
         [InjectOptional] private IRotationSpeedDispatcher RotationSpeedDispatcher { get; set; }
         [InjectOptional] private IRotationCountDispatcher RotationCountDispatcher { get; set; }
+        [Inject] private ITotalCountReceiver TotalCountReceiver { get; set; }
 
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
@@ -52,6 +53,11 @@ namespace CAFU.Rotator.Presentation.Presenter
 
         IObservable<Unit> IRotatorPresenter.GetTotalRotationCountAsObservable() =>
             RotationCountDispatcher.GetTotalRotationCountAsObservable();
+
+        void IRotatorPresenter.ReportTotalCount(int totalCount)
+        {
+            TotalCountReceiver.ReceiveTotalCount(totalCount);
+        }
 
         void IRotatorPresenter.TotalRotationCount(int totalRotationCount)
         {

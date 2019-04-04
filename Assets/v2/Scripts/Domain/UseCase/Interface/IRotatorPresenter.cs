@@ -16,5 +16,6 @@ namespace CAFU.Rotator.Domain.UseCase.Interface
         IObservable<RotatePosition> StartRotatorAsObservable();
         IObservable<RotatePosition> UpdateRotatorAsObservable();
         IObservable<Unit> GetTotalRotationCountAsObservable();
+        void ReportTotalCount(int totalCount);
     }
 }

@@ -3,6 +3,7 @@ using CAFU.Core;
 using CAFU.Rotator.Application.Enum;
 using CAFU.Rotator.Domain.Entity;
 using CAFU.Rotator.Domain.UseCase.Interface;
+using CAFU.Signal.Domain.Entity;
 using ExtraUniRx;
 using UniRx;
 using UnityEngine;
@@ -19,6 +20,9 @@ namespace CAFU.Rotator.Domain.UseCase
         [Inject] private IRotatorEntity RotatorEntity { get; set; }
         [Inject] private IRotatorPresenter RotatorPresenter { get; set; }
 
+        [Inject] private IFinishReporter FinishReporter { get; set; }
+        [Inject] private SignalBus SignalBus { get; set; }
+
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
         private RotateDirection RotateDirection { get; set; }
@@ -33,7 +37,35 @@ namespace CAFU.Rotator.Domain.UseCase
             Disposable.Add(StartObservingStartRotator());
             Disposable.Add(StartObservingUpdateRotator());
             Disposable.Add(StartObservingRotationCount());
+
+            Disposable.Add(
+                FinishReporter
+                    .OnFinishAsObservable()
+                    .Subscribe(_ => RotatorPresenter.ReportTotalCount(TotalRotationCount))
+                );
+//            Disposable.Add(
+//                SignalBus
+//                    .GetStream<Signal.Finish>()
+//                    .Subscribe(_ => SignalBus.Fire(TotalCountFactory.Create(TotalRotationCount)))
+//            );
         }
+
+//        [Inject] private TotalCount.Factory TotalCountFactory { get; set; }
+//
+//        public struct TotalCount
+//        {
+//            public int Value { get; }
+//
+//            public TotalCount(int value)
+//            {
+//                Value = value;
+//            }
+//
+//            public class Factory : PlaceholderFactory<int, TotalCount>
+//            {
+//
+//            }
+//        }
 
         void IDisposable.Dispose()
         {
