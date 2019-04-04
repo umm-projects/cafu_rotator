@@ -24,12 +24,13 @@
     "Assets"
   ],
   "dependencies": {
-    "@umm/cafu_core": "umm/cafu_core#^2.0.0",
+    "@umm/cafu_core": "umm/cafu_core#^3.0.0",
     "@umm/cafu_resume_pause": "umm/cafu_resume_pause#^1.0.0",
     "@umm/event_activator": "umm/event_activator#^1.0.0",
     "@umm/extra_unirx": "umm/extra_unirx#^1.0.0",
     "@umm/scripts": "umm/scripts#^1.0.0",
-    "@umm/unirx": "umm/unirx#^2.0.0"
+    "@umm/unirx": "umm/unirx#^2.0.0",
+    "@umm/zenject": "umm/zenject#^2.0.0"
   },
   "devDependencies": {}
 }

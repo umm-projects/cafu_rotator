@@ -10,6 +10,14 @@
     "@umm/unirx" umm/unirx#^2.0.0
     "@umm/unirx_observablelifecyclemonobehaviour" umm/unirx_observablelifecyclemonobehaviour#^1.0.0
 
+"@umm/cafu_core@umm/cafu_core#^3.0.0":
+  version "3.0.0"
+  resolved "https://codeload.github.com/umm/cafu_core/tar.gz/6dabb8acd8e92d11745caa5b33fe4183cb25c47c"
+  dependencies:
+    "@umm/scripts" umm/scripts#^1.0.0
+    "@umm/unirx" umm/unirx#^2.0.0
+    "@umm/unirx_observablelifecyclemonobehaviour" umm/unirx_observablelifecyclemonobehaviour#^1.0.0
+
 "@umm/cafu_resume_pause@umm/cafu_resume_pause#^1.0.0":
   version "1.1.2"
   resolved "https://codeload.github.com/umm/cafu_resume_pause/tar.gz/07ebe198f57354898dc08efbe6f85cbc9e96013c"
@@ -31,6 +39,12 @@
   dependencies:
     "@umm/scripts" umm/scripts#^1.0.0
     "@umm/unirx" umm/unirx#^2.0.0
+
+"@umm/moq@umm/moq#^1.0.0":
+  version "1.0.0"
+  resolved "https://codeload.github.com/umm/moq/tar.gz/5c3b47795a773b637a98e13c534236fb927a5bda"
+  dependencies:
+    "@umm/scripts" umm/scripts#^1.0.0
 
 "@umm/scripts@umm/scripts#^1.0.0":
   version "1.4.1"
@@ -56,6 +70,14 @@
   version "1.2.2"
   resolved "https://codeload.github.com/umm/unirx_observablelifecyclemonobehaviour/tar.gz/609d94fe31f081a7045014ca95d0c248cc925621"
   dependencies:
+    "@umm/scripts" umm/scripts#^1.0.0
+    "@umm/unirx" umm/unirx#^2.0.0
+
+"@umm/zenject@umm/zenject#^2.0.0":
+  version "2.2.3"
+  resolved "https://codeload.github.com/umm/zenject/tar.gz/85bd8afba374d1ee9b6c961d7152f993efe625db"
+  dependencies:
+    "@umm/moq" umm/moq#^1.0.0
     "@umm/scripts" umm/scripts#^1.0.0
     "@umm/unirx" umm/unirx#^2.0.0
 
