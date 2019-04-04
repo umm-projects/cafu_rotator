@@ -13,7 +13,7 @@ namespace CAFU.Rotator.Presentation.View
 
         void IRotatorRotationRenderer.ReceiveRotationDiffRad(float rotationDiffRad)
         {
-            if (!IsValidRorateDirection(rotationDiffRad))
+            if (!IsValidRotateDirection(rotationDiffRad))
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace CAFU.Rotator.Presentation.View
             return Observable.Return(RotateDirection);
         }
 
-        private bool IsValidRorateDirection(float rotationDiffRad)
+        private bool IsValidRotateDirection(float rotationDiffRad)
         {
             switch (RotateDirection)
             {
