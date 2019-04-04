@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace CAFU.Rotator.Presentation.View
 {
-    public class RotatorRotationRenderer : MonoBehaviour, IRotationRenderer
+    public class RotatorRotationRenderer : MonoBehaviour, IRotatorRotationRenderer
     {
         [SerializeField] private RotateDirection rotateDirection = RotateDirection.Both;
         private RotateDirection RotateDirection => rotateDirection;
 
-        void IRotationRenderer.Render(float rotationDiffRad)
+        void IRotatorRotationRenderer.ReceiveRotationDiffRad(float rotationDiffRad)
         {
             if (!IsValidRorateDirection(rotationDiffRad))
             {
@@ -21,7 +21,7 @@ namespace CAFU.Rotator.Presentation.View
             transform.Rotate(Vector3.forward, Mathf.Rad2Deg * rotationDiffRad);
         }
 
-        IObservable<RotateDirection> IRotationRenderer.RotateDirectionAsObservable()
+        IObservable<RotateDirection> IRotatorRotationRenderer.RequestRotateDirectionAsObservable()
         {
             return Observable.Return(RotateDirection);
         }

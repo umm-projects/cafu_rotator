@@ -10,11 +10,11 @@ namespace CAFU.Rotator.Presentation.Presenter
 {
     public class RotatorPresenter : IRotatorPresenter, IInitializable, IDisposable
     {
-        [Inject] private IRotationRenderer RotationRenderer { get; set; }
+        [Inject] private IRotatorRotationRenderer RotatorRotationRenderer { get; set; }
         [Inject] private IRotatorEventDispatcher RotatorInput { get; set; }
-        [InjectOptional] private IRotationSpeedDispatcher RotationSpeedDispatcher { get; set; }
-        [InjectOptional] private IRotationCountDispatcher RotationCountDispatcher { get; set; }
-        [Inject] private ITotalCountReceiver TotalCountReceiver { get; set; }
+
+        [InjectOptional] private IRotatorRotationSpeedReceiver RotatorRotationSpeedReceiver { get; set; }
+        [InjectOptional] private IRotatorRotationCountReceiver RotatorRotationCountReceiver { get; set; }
 
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
@@ -27,51 +27,25 @@ namespace CAFU.Rotator.Presentation.Presenter
             Disposable?.Dispose();
         }
 
-        void IRotatorPresenter.UpdateRotationDiffRad(float rotationDiffRad)
-        {
-            RotationRenderer.Render(rotationDiffRad);
-        }
+        void IRotatorPresenter.ReportRotationDiffRad(float rotationDiffRad) =>
+            RotatorRotationRenderer.ReceiveRotationDiffRad(rotationDiffRad);
 
-        void IRotatorPresenter.UpdateRotationSpeed(float rotationSpeed)
-        {
-            if (RotationSpeedDispatcher == default)
-            {
-                return;
-            }
+        void IRotatorPresenter.ReportRotationSpeed(float rotationSpeed) =>
+            RotatorRotationSpeedReceiver?.ReceiveRotationSpeed(rotationSpeed);
 
-            RotationSpeedDispatcher.DispatchRotationSpeed(rotationSpeed);
-        }
+        void IRotatorPresenter.ReportRotationCount(int rotationCount) =>
+            RotatorRotationCountReceiver?.ReceiveRotationCount(rotationCount);
 
-        IObservable<RotateDirection> IRotatorPresenter.RotateDirectionAsObservable() =>
-            RotationRenderer.RotateDirectionAsObservable();
+        void IRotatorPresenter.ReportTotalRotationCount(int totalRotationCount) =>
+            RotatorRotationCountReceiver?.ReceiveTotalRotationCount(totalRotationCount);
+
+        IObservable<RotateDirection> IRotatorPresenter.RequestRotateDirectionAsObservable() =>
+            RotatorRotationRenderer.RequestRotateDirectionAsObservable();
 
         IObservable<RotatePosition> IRotatorPresenter.StartRotatorAsObservable() =>
             RotatorInput.StartRotator().AsObservable();
 
         IObservable<RotatePosition> IRotatorPresenter.UpdateRotatorAsObservable() =>
             RotatorInput.UpdateRotator().AsObservable();
-
-        IObservable<Unit> IRotatorPresenter.GetTotalRotationCountAsObservable() =>
-            RotationCountDispatcher.GetTotalRotationCountAsObservable();
-
-        void IRotatorPresenter.ReportTotalCount(int totalCount)
-        {
-            TotalCountReceiver.ReceiveTotalCount(totalCount);
-        }
-
-        void IRotatorPresenter.TotalRotationCount(int totalRotationCount)
-        {
-            RotationCountDispatcher.DispatchTotalRotationCount(totalRotationCount);
-        }
-
-        void IRotatorPresenter.UpdateRotationCount(int rotationCount)
-        {
-            if (RotationCountDispatcher == default)
-            {
-                return;
-            }
-
-            RotationCountDispatcher.DispatchRotationCount(rotationCount);
-        }
     }
 }

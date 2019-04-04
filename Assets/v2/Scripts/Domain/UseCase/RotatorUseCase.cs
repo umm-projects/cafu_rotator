@@ -3,8 +3,6 @@ using CAFU.Core;
 using CAFU.Rotator.Application.Enum;
 using CAFU.Rotator.Domain.Entity;
 using CAFU.Rotator.Domain.UseCase.Interface;
-using CAFU.Signal.Domain.Entity;
-using ExtraUniRx;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -20,8 +18,7 @@ namespace CAFU.Rotator.Domain.UseCase
         [Inject] private IRotatorEntity RotatorEntity { get; set; }
         [Inject] private IRotatorPresenter RotatorPresenter { get; set; }
 
-        [Inject] private IFinishReporter FinishReporter { get; set; }
-        [Inject] private SignalBus SignalBus { get; set; }
+        [InjectOptional] private IRotatorFinishReporter RotatorFinishReporter { get; set; }
 
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
 
@@ -30,74 +27,50 @@ namespace CAFU.Rotator.Domain.UseCase
 
         void IInitializable.Initialize()
         {
-            Disposable.Add(StartObservingRotateDirection());
-            Disposable.Add(StartObservingRotationDiffRad());
-            Disposable.Add(StartObservingRotationSpeed());
-            Disposable.Add(StartObservingGetTotalRotationCount());
+            Disposable.Add(StartObservingRequestRotateDirection());
+            Disposable.Add(StartObservingReportRotationDiffRad());
+            Disposable.Add(StartObservingReportRotationSpeed());
+            Disposable.Add(StartObservingReportRotationCount());
             Disposable.Add(StartObservingStartRotator());
             Disposable.Add(StartObservingUpdateRotator());
-            Disposable.Add(StartObservingRotationCount());
-
-            Disposable.Add(
-                FinishReporter
-                    .OnFinishAsObservable()
-                    .Subscribe(_ => RotatorPresenter.ReportTotalCount(TotalRotationCount))
-                );
-//            Disposable.Add(
-//                SignalBus
-//                    .GetStream<Signal.Finish>()
-//                    .Subscribe(_ => SignalBus.Fire(TotalCountFactory.Create(TotalRotationCount)))
-//            );
+            Disposable.Add(StartObservingReceiveTotalRotationCount());
         }
-
-//        [Inject] private TotalCount.Factory TotalCountFactory { get; set; }
-//
-//        public struct TotalCount
-//        {
-//            public int Value { get; }
-//
-//            public TotalCount(int value)
-//            {
-//                Value = value;
-//            }
-//
-//            public class Factory : PlaceholderFactory<int, TotalCount>
-//            {
-//
-//            }
-//        }
 
         void IDisposable.Dispose()
         {
             Disposable?.Dispose();
         }
 
-        private IDisposable StartObservingRotateDirection()
+        private IDisposable StartObservingRequestRotateDirection()
         {
             return RotatorPresenter
-                .RotateDirectionAsObservable()
+                .RequestRotateDirectionAsObservable()
                 .Subscribe(rotateDirection => RotateDirection = rotateDirection);
         }
 
-        private IDisposable StartObservingRotationDiffRad()
+        private IDisposable StartObservingReportRotationDiffRad()
         {
             return RotatorEntity
                 .RotationDiffRad
-                .Subscribe(rotationDiffRad => RotatorPresenter.UpdateRotationDiffRad(rotationDiffRad));
+                .Subscribe(rotationDiffRad => RotatorPresenter.ReportRotationDiffRad(rotationDiffRad));
         }
 
-        private IDisposable StartObservingRotationSpeed()
+        private IDisposable StartObservingReportRotationSpeed()
         {
             return RotatorEntity
                 .RotationSpeed
-                .Subscribe(rotationSpeed => RotatorPresenter.UpdateRotationSpeed(rotationSpeed));
+                .Subscribe(rotationSpeed => RotatorPresenter.ReportRotationSpeed(rotationSpeed));
         }
 
-        private IDisposable StartObservingGetTotalRotationCount()
+        private IDisposable StartObservingReportRotationCount()
         {
-            return RotatorPresenter
-                .GetTotalRotationCountAsObservable()
-                .Subscribe(_ => RotatorPresenter.TotalRotationCount(TotalRotationCount));
+            return RotatorEntity
+                .RotationCountAsObservable(RotateDirection)
+                .Subscribe(rotationCount =>
+                {
+                    TotalRotationCount = rotationCount;
+                    RotatorPresenter.ReportRotationCount(rotationCount);
+                });
         }
 
         private IDisposable StartObservingStartRotator()
@@ -135,15 +108,11 @@ namespace CAFU.Rotator.Domain.UseCase
             return Mathf.Atan2(relativePosition.y, relativePosition.x);
         }
 
-        private IDisposable StartObservingRotationCount()
+        private IDisposable StartObservingReceiveTotalRotationCount()
         {
-            return RotatorEntity
-                .RotationCountAsObservable(RotateDirection)
-                .Subscribe(rotationCount =>
-                {
-                    TotalRotationCount = rotationCount;
-                    RotatorPresenter.UpdateRotationCount(rotationCount);
-                });
+            return RotatorFinishReporter?
+                .OnFinishedAsObservable()
+                .Subscribe(_ => RotatorPresenter.ReportTotalRotationCount(TotalRotationCount));
         }
     }
 }
